@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/6ed03867-b603-4428-ae22-7137bd937955/resourceGroups/Dimeline/providers/Microsoft.Web/sites/dimeline",
+    "appService.deploySubpath": "."
+}
