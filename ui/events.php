@@ -1,7 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map of Places</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
@@ -14,18 +17,14 @@
 
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    <style>
-        body { margin: 0; }
-        #map { height: 100vh; }
-    </style>
-</script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+        </script>
 
     <style>
         .bd-placeholder-img {
@@ -168,90 +167,52 @@
             margin-bottom: 0;
         }
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #map {
+            height: 100vh;
+        }
+    </style>
 </head>
 
 <body>
+    <?php include './navbar.php' ?>
+    <div id="map"></div>
 
-    <div class="container">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([26.677272592022977, -80.03697483950745], 13); // Set initial map view
 
-        <?php include './navbar.php'; ?>
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
+        // Load places from JSON file
+        fetch('../data/places.json')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(place => {
+                    // Extract coordinates and name of the place
+                    var latitude = place.latitude;
+                    var longitude = place.longitude;
+                    var name = place.place_name;
 
-        <div class="row mb-2">
+                    // Add marker for the place with popup
+                    var marker = L.marker([latitude, longitude]).addTo(map)
+                        .bindPopup(name );
 
-            <div class="container mt-5">
-                <h1 class="mb-4">Add Place</h1>
+                    marker.openPopup();
 
-                <!-- Add Place Form -->
-                <form id="addPlaceForm" action="../backend/places.php" method="POST">
-                    <div class="mb-3">
-                        <label for="place_name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="place_name" name="place_name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="latitude" class="form-label">Latitude</label>
-                        <input type="text" class="form-control" id="latitude" name="latitude" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="longitude" class="form-label">Longitude</label>
-                        <input type="text" class="form-control" id="longitude" name="longitude" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" name ="addPlace">Add Place</button>
-                </form>
-            </div>
-
-        </div>
-    </div>
-    <div class="container mt-5">
-    <h1 class="mb-4">Places List</h1>
-
-<!-- Places Table -->
-<table class="table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Description</th>
-      
-    </tr>
-  </thead>
-  <tbody id="placesTableBody">
-    <?php
-    // Include your PHP file containing functions
-    include '../backend/places.php';
-
-    // Retrieve all places
-    $places = getAllPlaces();
-
-    // Loop through each place and display its information in the table rows
-    foreach ($places as $place) {
-      echo "<tr>";
-      echo "<td>" . $place['place_name'] . "</td>";
-      echo "<td>" . $place['latitude'] . "</td>";
-      echo "<td>" . $place['longitude'] . "</td>";
-      echo "<td>" . $place['description'] . "</td>";
-      // Edit button triggers a modal or redirect to edit page
-      echo "</tr>";
-    }
-    ?>
-  </tbody>
-</table>    
-
-</div>
-    <footer class="blog-footer">
-        <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-        <p>
-            <a href="#">Back to top</a>
-        </p>
-    </footer>
-
-
-
+                });
+            })
+            .catch(error => {
+                console.error('Error loading places:', error);
+            });
+    </script>
 </body>
 
 </html>
