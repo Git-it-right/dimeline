@@ -1,0 +1,23 @@
+[
+    {
+        "person_id": "6623abf8bdde9",
+        "person_name": "Donald Trump",
+        "birth_date": "1946-06-14",
+        "description": "POTUS 45",
+        "profile_picture": "6623abf8bddec_download.jpg"
+    },
+    {
+        "person_id": "6623ad7e4f398",
+        "person_name": "Hillary Clinton",
+        "birth_date": "1947-10-26",
+        "description": "Runner Up in presidential election ",
+        "profile_picture": "6623ad7e4f39b_102016-Hillary-Clinton-LEAD-f4d1b486d7a7437b86c3aba333994502.jpg"
+    },
+    {
+        "person_id": "6624d6f9ab57e",
+        "person_name": "Marco Rubio",
+        "birth_date": "1971-05-28",
+        "description": "Republican nominee in 2016",
+        "profile_picture": "6624d6f9ab581_images.jpg"
+    }
+]

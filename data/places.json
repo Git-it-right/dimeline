@@ -1,1 +1,16 @@
-
+[
+    {
+        "place_id": "6624da2e18442",
+        "place_name": "Mar-a-Lago",
+        "latitude": "26.677272592022977",
+        "longitude": "-80.03697483950745",
+        "description": "Donald Trumps Private Golf Course"
+    },
+    {
+        "place_id": "66256175c9274",
+        "place_name": "White House",
+        "latitude": "38.897818248433985",
+        "longitude": "-77.03629913003023",
+        "description": "The White House"
+    }
+]
