@@ -12,5 +12,19 @@
         "latitude": "38.897818248433985",
         "longitude": "-77.03629913003023",
         "description": "The White House"
+    },
+    {
+        "place_id": "662cabdfe41a6",
+        "place_name": "13 Woodland Crescent",
+        "latitude": "-26.055496308151206",
+        "longitude": " 28.069845299193993",
+        "description": "Roos Home"
+    },
+    {
+        "place_id": "662eb1f848f57",
+        "place_name": "Virgin Active Morningside",
+        "latitude": "-26.088680909292442",
+        "longitude": "28.060330716292498",
+        "description": "New Gym"
     }
 ]
