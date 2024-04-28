@@ -1,3 +1,8 @@
+<?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,19 +12,15 @@
     <title>Add Event</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap Clockpicker CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/clockpicker/0.0.7/bootstrap-clockpicker.min.css" rel="stylesheet">
-    <!-- Bootstrap Clockpicker JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clockpicker/0.0.7/bootstrap-clockpicker.min.js"></script>
     <style>
         body {
             background-color: #f8f9fa;
             padding-top: 50px;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px; /* Adjusted max-width */
             margin: 0 auto;
         }
         .table-container {
@@ -28,7 +29,7 @@
     </style>
 </head>
 <body>
-<?PHP include './navbar.php';?>
+    <?php include './navbar.php'; ?>
     <div class="container">
         <h1 class="mb-4">Add Event</h1>
         <form id="addEventForm" action="../backend/events.php" method="POST">
@@ -88,6 +89,10 @@
         </table>
     </div>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap Clockpicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clockpicker/0.0.7/bootstrap-clockpicker.min.js"></script>
     <script>
         $(document).ready(function() {
             // Initialize clockpicker
@@ -154,7 +159,7 @@
                     rows += '<td>' + value.eventName + '</td>';
                     rows += '<td>' + value.eventDate + '</td>';
                     rows += '<td>' + value.eventTime + '</td>';
-                    rows += '<td><a href="view_event.php?id=' + value.eventName + '" class="btn btn-primary">View Event</a></td>';
+                    rows += '<td><a href="view_event.php?id=' + value.eventGuid + '" class="btn btn-primary">View Event</a></td>';
                     rows += '</tr>';
                 });
                 $('#existingEvents').html(rows); // Append rows to table body
