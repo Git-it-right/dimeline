@@ -1,0 +1,235 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "For_each": {
+                "actions": {
+                    "For_each_2": {
+                        "actions": {},
+                        "foreach": "@body('List_files_in_folder')",
+                        "runAfter": {
+                            "Get_file_content_using_id": [
+                                "Succeeded",
+                                "Failed"
+                            ]
+                        },
+                        "type": "Foreach"
+                    },
+                    "Get_file_content_using_id": {
+                        "inputs": {
+                            "host": {
+                                "connection": {
+                                    "name": "@parameters('$connections')['googledrive_1']['connectionId']"
+                                }
+                            },
+                            "method": "get",
+                            "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Id']))}/content",
+                            "queries": {
+                                "inferContentType": true
+                            }
+                        },
+                        "runAfter": {},
+                        "type": "ApiConnection"
+                    }
+                },
+                "foreach": "@body('List_files_in_folder')",
+                "runAfter": {
+                    "List_files_in_folder": [
+                        "Succeeded",
+                        "Failed"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "concurrency": {
+                        "repetitions": 1
+                    }
+                },
+                "type": "Foreach"
+            },
+            "For_each_3": {
+                "actions": {
+                    "Condition": {
+                        "actions": {
+                            "Create_file": {
+                                "inputs": {
+                                    "body": "@body('Get_file_content_using_id_2')",
+                                    "host": {
+                                        "connection": {
+                                            "name": "@parameters('$connections')['onedrive']['connectionId']"
+                                        }
+                                    },
+                                    "method": "post",
+                                    "path": "/datasets/default/files",
+                                    "queries": {
+                                        "folderPath": "/Transcribed Files",
+                                        "name": "@items('For_each_3')?['DisplayName']"
+                                    }
+                                },
+                                "runAfter": {
+                                    "Get_file_content_using_id_2": [
+                                        "Succeeded"
+                                    ]
+                                },
+                                "runtimeConfiguration": {
+                                    "contentTransfer": {
+                                        "transferMode": "Chunked"
+                                    }
+                                },
+                                "type": "ApiConnection"
+                            },
+                            "Delete_file": {
+                                "inputs": {
+                                    "host": {
+                                        "connection": {
+                                            "name": "@parameters('$connections')['googledrive_1']['connectionId']"
+                                        }
+                                    },
+                                    "method": "delete",
+                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_3')?['Id']))}"
+                                },
+                                "runAfter": {
+                                    "Create_file": [
+                                        "Succeeded"
+                                    ]
+                                },
+                                "type": "ApiConnection"
+                            },
+                            "Get_file_content_using_id_2": {
+                                "inputs": {
+                                    "host": {
+                                        "connection": {
+                                            "name": "@parameters('$connections')['googledrive_1']['connectionId']"
+                                        }
+                                    },
+                                    "method": "get",
+                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_3')?['Id']))}/content",
+                                    "queries": {
+                                        "inferContentType": true
+                                    }
+                                },
+                                "runAfter": {},
+                                "type": "ApiConnection"
+                            }
+                        },
+                        "else": {
+                            "actions": {
+                                "List_files_in_folder_4": {
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['googledrive_1']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/datasets/default/folders/@{encodeURIComponent(encodeURIComponent(items('For_each_3')?['Id']))}"
+                                    },
+                                    "runAfter": {},
+                                    "type": "ApiConnection"
+                                }
+                            }
+                        },
+                        "expression": {
+                            "and": [
+                                {
+                                    "equals": [
+                                        "@items('For_each_3')?['IsFolder']",
+                                        "@false"
+                                    ]
+                                }
+                            ]
+                        },
+                        "runAfter": {},
+                        "type": "If"
+                    }
+                },
+                "foreach": "@body('List_files_in_folder_2')",
+                "runAfter": {
+                    "List_files_in_folder_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Foreach"
+            },
+            "List_files_in_folder": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['googledrive_1']['connectionId']"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/datasets/default/folders/@{encodeURIComponent(encodeURIComponent(''))}"
+                },
+                "metadata": {
+                    "1ILcPErU6wGxSllDtf6Ey04_EK7lKCWJY": "/Dropbox",
+                    "6e202211-2856-4d17-9ded-5beb8b8626b0": "/"
+                },
+                "runAfter": {
+                    "For_each_3": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "List_files_in_folder_2": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['googledrive_1']['connectionId']"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/datasets/default/folders/@{encodeURIComponent(encodeURIComponent('1-oyqlhp3QEL2_M9ZnW144ZlJDWv3lTwp'))}"
+                },
+                "metadata": {
+                    "1-oyqlhp3QEL2_M9ZnW144ZlJDWv3lTwp": "/Dropbox/.dropbox.cache/2015-06-07",
+                    "1uNAPaiUTp7DDXrXqIgeDucanF6LUOu_D": "/Dropbox/.dropbox.cache/2015-06-06"
+                },
+                "runAfter": {},
+                "type": "ApiConnection"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "Recurrence": {
+                "evaluatedRecurrence": {
+                    "frequency": "Day",
+                    "interval": 1
+                },
+                "recurrence": {
+                    "frequency": "Day",
+                    "interval": 1
+                },
+                "runtimeConfiguration": {
+                    "concurrency": {
+                        "runs": 1
+                    }
+                },
+                "type": "Recurrence"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {
+                "googledrive_1": {
+                    "connectionId": "/subscriptions/6ed03867-b603-4428-ae22-7137bd937955/resourceGroups/GoogleDrive-Transfer-OneDrive-LA_group/providers/Microsoft.Web/connections/googledrive-1",
+                    "connectionName": "googledrive-1",
+                    "id": "/subscriptions/6ed03867-b603-4428-ae22-7137bd937955/providers/Microsoft.Web/locations/southafricanorth/managedApis/googledrive"
+                },
+                "onedrive": {
+                    "connectionId": "/subscriptions/6ed03867-b603-4428-ae22-7137bd937955/resourceGroups/GoogleDrive-Transfer-OneDrive-LA_group/providers/Microsoft.Web/connections/onedrive",
+                    "connectionName": "onedrive",
+                    "id": "/subscriptions/6ed03867-b603-4428-ae22-7137bd937955/providers/Microsoft.Web/locations/southafricanorth/managedApis/onedrive"
+                }
+            }
+        }
+    }
+}
