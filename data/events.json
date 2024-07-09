@@ -10,17 +10,7 @@
         ],
         "selectedLocation": "66256175c9274"
     },
-    {
-        "eventGuid": "41b8859d-018d-499d-84004606bf5580164",
-        "eventName": "Breakfast",
-        "eventDate": "2024-04-26",
-        "eventTime": "9:45",
-        "eventDescription": "Had Breakfast",
-        "selectedPeople": [
-            "6623abf8bdde9"
-        ],
-        "selectedLocation": "662cabdfe41a6"
-    },
+  
     {
         "eventGuid": "aa81d012-0fc6-4a07-820d71934faf678b9",
         "eventName": "Water thrown on Rubio",
@@ -32,16 +22,5 @@
             "6624d6f9ab57e"
         ],
         "selectedLocation": "66256175c9274"
-    },
-    {
-        "eventGuid": "80c78af6-b534-4f9f-84cfaf8cc5eabfec1",
-        "eventName": "Gym",
-        "eventDate": "2024-04-28",
-        "eventTime": "16:15",
-        "eventDescription": "Chest and Back",
-        "selectedPeople": [
-            "662eb22800689"
-        ],
-        "selectedLocation": "662eb1f848f57"
     }
 ]
